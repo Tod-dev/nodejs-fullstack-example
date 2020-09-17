@@ -1,9 +1,20 @@
 import React from 'react';
 
-function App() {
+import Notes from "./pages/notes";
+
+const mood = "exampleApp"; //initialValue
+
+const App = () => {
+  if(mood === "initialValue"){
+    return(
+      <div className="App">
+        <p>App to try things in react, do what you want !</p>
+      </div>
+    );
+  }
   return (
     <div className="App">
-      <p>App to try things in react, do what you want !</p>
+      <Notes />
     </div>
   );
 }
