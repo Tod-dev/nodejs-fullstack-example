@@ -1,10 +1,10 @@
 import React from 'react';
-
 import Notes from "./pages/notes";
 
 const mood = "exampleApp"; //initialValue
 
 const App = () => {
+
   if(mood === "initialValue"){
     return(
       <div className="App">
