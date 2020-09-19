@@ -38,3 +38,21 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 } 
+
+button{
+  cursor: pointer;
+}
+
+.error{
+  background: red;
+  color: white;
+  cursor: pointer;
+  font-size: small;
+}
+
+.success{
+  background: green;
+  color: white;
+  cursor: pointer;
+  font-size: small;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Notes from "./pages/notes";
+import Notes from "./pages/Notes";
 
 const mood = "exampleApp"; //initialValue
 
