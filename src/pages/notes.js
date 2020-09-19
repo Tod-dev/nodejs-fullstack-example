@@ -31,8 +31,11 @@ const Notes = () => {
         setLoading(false);
       }
     }
-    if(loading)
-    fetchData().catch(err => console.log(err.message));
+    if(loading){
+      fetchData().catch(err => {console.log(err.message); setError(true)});
+      console.log("fetching ...");
+    }
+    setLoading(false);
   },[loading]);
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important);
