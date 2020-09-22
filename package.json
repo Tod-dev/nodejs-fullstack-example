@@ -10,7 +10,8 @@
     "babel-preset-react-app": "^9.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "yarn": "^1.22.5"
   },
   "scripts": {
     "start-client": "react-scripts start",
