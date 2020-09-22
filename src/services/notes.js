@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3001/api/notes";
+const baseUrl = "/api/notes"; //http://localhost:3001/api/notes
 
 export const getAll = () => {
   return fetch(`${baseUrl}`);

@@ -12,11 +12,12 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start-client": "react-scripts start",
+    "build": "react-scripts build && (cd backend && yarn install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -p3001 --watch ./src/data/db.json"
+    "server": "json-server -p3001 --watch ./src/data/db.json",
+    "start": "cd backend && yarn start"
   },
   "eslintConfig": {
     "extends": "react-app"

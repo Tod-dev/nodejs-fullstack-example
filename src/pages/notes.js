@@ -20,7 +20,7 @@ const Notes = () => {
   useEffect(() => {
     async function fetchData(){
       let response = await getAll();
-      console.log(response);
+      //console.log(response);
       if(!response.ok){
         setLoading(false);
         setError(true);
@@ -34,7 +34,7 @@ const Notes = () => {
     }
     if(loading){
       fetchData().catch(err => {console.log(err.message); setError(true)});
-      console.log("fetching ...");
+      //console.log("fetching ...");
     }
     setLoading(false);
   },[loading]);

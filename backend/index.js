@@ -1,8 +1,12 @@
+const path = require("path");
 const express = require("express");
-var cors = require('cors');
+//var cors = require('cors');
 const app = express();
 
-app.use(cors());
+const buildPath = path.join(__dirname, '..', 'build');
+
+app.use(express.static(buildPath));
+//app.use(cors());
 app.use(express.json());
 
 let notes = [
@@ -28,9 +32,9 @@ let notes = [
 
 const notesUrl = "/api/notes";
 
-app.get("/",(req,res) => {
-  res.send("<h1>Hello World!</h1>");
-});
+// app.get("/",(req,res) => {
+//   res.send("<h1>Hello World!</h1>");
+// });
 
 app.get(notesUrl, (req,res) => {
   res.json(notes);
@@ -84,5 +88,5 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = process.env.PORT ||  3001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
