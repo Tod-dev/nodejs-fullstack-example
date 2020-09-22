@@ -32,9 +32,10 @@ let notes = [
 
 const notesUrl = "/api/notes";
 
-// app.get("/",(req,res) => {
-//   res.send("<h1>Hello World!</h1>");
-// });
+app.get("/",(req,res) => {
+  //res.send("<h1>Hello World!</h1>");
+  res.sendFile(path.join(buildPath,"index.html"));
+});
 
 app.get(notesUrl, (req,res) => {
   res.json(notes);
