@@ -7,6 +7,9 @@
     "start": "node index.js",
     "start-dev": "nodemon index.js"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "keywords": [],
   "author": "Tod-dev",
   "license": "ISC",
