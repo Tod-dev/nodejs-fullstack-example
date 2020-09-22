@@ -20,6 +20,7 @@ const Notes = () => {
   useEffect(() => {
     async function fetchData(){
       let response = await getAll();
+      console.log(response);
       if(!response.ok){
         setLoading(false);
         setError(true);
