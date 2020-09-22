@@ -38,5 +38,8 @@
   "devDependencies": {
     "json-server": "^0.16.1"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": "12.x"
+  }
 }
