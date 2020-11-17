@@ -7,9 +7,10 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "babel-preset-react-app": "^9.1.2",
+    "mongoose": "^5.10.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^4.0.0",
     "yarn": "^1.22.5"
   },
   "scripts": {
