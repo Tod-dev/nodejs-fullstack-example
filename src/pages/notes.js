@@ -3,7 +3,7 @@ import React,{useState, useEffect} from 'react'
 import Note from "../models/notes";
 //import dummyNotes from "../data/notes";
 import Nota from "../components/Note";
-import {getAll,create,update} from "../services/notes";
+import {getAll,create,update,deletenote} from "../services/notes";
 import Notification from "../components/Notification";
 
 const newNoteInitialValue = "";
@@ -33,7 +33,7 @@ const Notes = () => {
       }
     }
     if(loading){
-      fetchData().catch(err => {console.log(err.message); setError(true)});
+      fetchData().catch(err => {console.log(err.message);setError(true)});
       //console.log("fetching ...");
     }
     setLoading(false);
@@ -63,7 +63,7 @@ const Notes = () => {
     setNewNote(event.target.value);
   };
 
-  const toggleImportantHandler = async(id) => {
+  const toggleImportantHandler = async (id) => {
     //console.log(id);
     const nota = notes.find(nota => nota.id === id);
     const updatedNota = {...nota, important: !nota.important};
@@ -78,6 +78,16 @@ const Notes = () => {
 
     }else{
       setMessage({type:"error", text:"Impossibile modificare l'importanza della nota!",show:true});
+    }
+  };
+
+  const deleteNote = async (id) => {
+    const nota = notes.find(nota => nota.id === id);
+    let res = await deletenote(nota);
+    if(res.ok){
+      setLoading(true);
+    }else{
+      setMessage({type:"error", text:"Impossibile eliminare la nota!",show:true});
     }
   };
 
@@ -100,7 +110,9 @@ const Notes = () => {
       <h1 style={{marginBottom:"5vh"}}>Notes</h1> 
       { message.show ? <Notification style={{marginBottom:"5vh"}}  message={message} setMessage={setMessage} />  : null}
       <ul>
-        {notesToShow.map(note => <Nota key={note.id} note={note} toggleImportant={() => toggleImportantHandler(note.id)} />)}
+        {notesToShow.map(note => 
+        <Nota key={note.id} note={note} toggleImportant={() => toggleImportantHandler(note.id)} deleteNote={() => deleteNote(note.id)} />
+        )}
       </ul>
       <form onSubmit={formSubmitHandler}>
         <input type="text" value={newNote} placeholder="a new note ..." onChange={inputChangeHanlder} />

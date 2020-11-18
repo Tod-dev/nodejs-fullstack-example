@@ -19,3 +19,9 @@ export const update = (updatedNota) => {
     body: JSON.stringify(updatedNota)
   });
 };
+
+export const deletenote = (nota) => {
+  return fetch(`${baseUrl}/${nota.id}`,{
+    method:"DELETE",
+  })
+};
