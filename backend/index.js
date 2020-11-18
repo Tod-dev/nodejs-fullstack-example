@@ -1,5 +1,7 @@
 const path = require("path");
 const express = require("express");
+const mongoose = require('mongoose')
+require('dotenv').config()
 //var cors = require('cors');
 const app = express();
 
@@ -32,13 +34,43 @@ let notes = [
 
 const notesUrl = "/api/notes";
 
+//mongooose
+
+const dbname = "note-app"
+
+const url =
+ `mongodb+srv://itsmetod:${process.env.DB_PSW}@cluster0.erdvr.mongodb.net/${dbname}?retryWrites=true&w=majority` 
+
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
+
+noteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
+//end mongoose
+
 app.get("/",(req,res) => {
   //res.send("<h1>Hello World!</h1>");
   res.sendFile(path.join(buildPath,"index.html"));
 });
 
 app.get(notesUrl, (req,res) => {
-  res.json(notes);
+  //res.json(notes);
+  Note.find({}).then(notes => {
+    res.json(notes)
+  })
 });
 
 app.get(`${notesUrl}/:id`, (req,res) => {
