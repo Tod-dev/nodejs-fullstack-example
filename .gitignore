@@ -2,6 +2,7 @@
 
 /backend/node_modules
 /backend/.env
+mongo.js
 
 # dependencies
 /node_modules
