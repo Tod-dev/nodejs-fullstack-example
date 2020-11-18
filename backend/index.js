@@ -1,66 +1,30 @@
+//* IMPORTING
+require('dotenv').config()
 const path = require("path");
 const express = require("express");
 const mongoose = require('mongoose')
-require('dotenv').config()
 //var cors = require('cors');
-const app = express();
 
+//?SETUP
+const app = express();
 const buildPath = path.join(__dirname, '..', 'build');
 
 app.use(express.static(buildPath));
 //app.use(cors());
 app.use(express.json());
 
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy",
-    date: "2019-05-30T17:30:31.098Z",
-    important: true
-  },
-  {
-    id: 2,
-    content: "Browser can execute only Javascript",
-    date: "2019-05-30T18:39:34.091Z",
-    important: false
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    date: "2019-05-30T19:20:14.298Z",
-    important: true
-  }
-];
-
 const notesUrl = "/api/notes";
 
-//mongooose
+//?END SETUP
 
-const dbname = "note-app"
+//!mongooose DB
+const Note = require('./models/note')
 
-const url =
- `mongodb+srv://itsmetod:${process.env.DB_PSW}@cluster0.erdvr.mongodb.net/${dbname}?retryWrites=true&w=majority` 
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+//!end mongoose DB
 
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
-})
 
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Note = mongoose.model('Note', noteSchema)
-
-//end mongoose
-
+//!ROUTES
 app.get("/",(req,res) => {
   //res.send("<h1>Hello World!</h1>");
   res.sendFile(path.join(buildPath,"index.html"));
@@ -98,21 +62,21 @@ const generateId = () => {
 
 app.post(notesUrl, (req,res) => {
 
-  const body = req.body;
-
-  if(!body.content){
-    return res.status(400).json({"error": "content missing"});
-  }
-
-  const note = {
-    content: body.content,
-    important: body.important || false,
-    date: new Date(),
-    id: generateId()
-  }
-
-  notes = notes.concat(note);
-  res.json(note);
+    const body = req.body
+  
+    if (body.content === undefined) {
+      return res.status(400).json({ error: 'content missing' })
+    }
+  
+    const note = new Note({
+      content: body.content,
+      important: body.important || false,
+      date: new Date(),
+    })
+  
+    note.save().then(savedNote => {
+      res.json(savedNote)
+    })
 });
 
 const unknownEndpoint = (request, response) => {
@@ -121,5 +85,12 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT ||  3001;
+
+//! END ROUTES
+
+//?SERVER RUN
+
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+//?END SERVER RUN
