@@ -2,7 +2,6 @@
 require('dotenv').config()
 const path = require("path");
 const express = require("express");
-const mongoose = require('mongoose')
 //var cors = require('cors');
 
 //?SETUP
@@ -25,37 +24,49 @@ const Note = require('./models/note')
 
 
 //!ROUTES
-app.get("/",(req,res) => {
-  //res.send("<h1>Hello World!</h1>");
-  res.sendFile(path.join(buildPath,"index.html"));
-});
 
 app.get(notesUrl, (req,res) => {
   //res.json(notes);
-  Note.find({}).then(notes => {
+  Note.find({})
+  .then(notes => {
     res.json(notes)
   })
+  .catch(err => next(err))
 });
 
-app.get(`${notesUrl}/:id`, (req,res) => {
-  Note.findById(req.params.id).then(note => {
-    res.json(note)
-  })
+app.get(`${notesUrl}/:id`, (req,res,next) => {
+ Note.findById(req.params.id)
+    .then(note => {
+      if (note) {
+        res.json(note)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 });
 
-app.delete(`${notesUrl}/:id`, (req,res) => {
-  const id = Number(req.params.id);
-  notes = notes.filter(note => note.id !== id);
-  console.log(notes);
-  res.status(204).end();
+app.delete(`${notesUrl}/:id`, (req,res,next) => {
+  Note.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 });
 
-const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-  return maxId + 1
-}
+app.put(`${notesUrl}:id`, (req,res,next) => {
+  const body = req.body
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+  
+  Note.findByIdAndUpdate(req.params.id, note, { new: true })
+    .then(updatedNote => {
+      res.json(updatedNote)
+    })
+    .catch(error => next(error))
+});
 
 app.post(notesUrl, (req,res) => {
 
@@ -82,6 +93,16 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+app.use(errorHandler)
 
 //! END ROUTES
 
