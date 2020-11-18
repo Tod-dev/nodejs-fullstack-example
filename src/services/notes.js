@@ -4,6 +4,10 @@ export const getAll = () => {
   return fetch(`${baseUrl}`);
 };
 
+export const getOne = (id) => {
+  return fetch(`${baseUrl}/${id}`);
+};
+
 export const create = (body) => {
   return fetch(`${baseUrl}`,{
     method: "POST",
@@ -22,6 +26,6 @@ export const update = (updatedNota) => {
 
 export const deletenote = (nota) => {
   return fetch(`${baseUrl}/${nota.id}`,{
-    method:"DELETE",
+    method:"DELETE"
   })
 };

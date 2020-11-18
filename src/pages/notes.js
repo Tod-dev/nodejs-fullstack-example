@@ -15,7 +15,7 @@ const Notes = () => {
   const [error,setError] = useState(false);
   const [loading,setLoading] = useState(true);
   const [message, setMessage] = useState({text:"", type: "success", show: false});
-
+  const [important, setImportant] = useState(false);
 
   useEffect(() => {
     async function fetchData(){
@@ -47,11 +47,11 @@ const Notes = () => {
       setNewNote(newNoteInitialValue);
       return;
     }
-    const nota = new Note(notes.length + 1 ,newNote, new Date().toISOString(), Math.random() < 0.5);
+    const nota = new Note(undefined,newNote, undefined, important);
     const response = await create(nota);
     if(response.ok){
-      setNotes(notes.concat(nota));
       setMessage({text:"Nota aggiunta Correttamente", type: "success", show: true});
+      setLoading(true);
     }
     else{
       setMessage({text:"impossibile aggiungere la nota!", type: "error", show: true});
@@ -63,17 +63,20 @@ const Notes = () => {
     setNewNote(event.target.value);
   };
 
+  const importantChangeHandler = (event) => {
+    setImportant(!important);
+    console.log(!important)
+  };
+
   const toggleImportantHandler = async (id) => {
     //console.log(id);
     const nota = notes.find(nota => nota.id === id);
     const updatedNota = {...nota, important: !nota.important};
+    //console.log(updatedNota)
     let res = await update(updatedNota);
-    let json = await res.json();
     //console.log(json);
     if(res.ok){
-      //update local data
-      const newVet = notes.map(note => note.id !== id ? note : json);
-      setNotes(newVet);
+      setLoading(true);
       setMessage({type:"success", text:"Importanza della nota modificata correttamente",show:true});
 
     }else{
@@ -85,6 +88,7 @@ const Notes = () => {
     const nota = notes.find(nota => nota.id === id);
     let res = await deletenote(nota);
     if(res.ok){
+      setMessage({type:"success", text:"Nota eliminata correttamente!",show:true});
       setLoading(true);
     }else{
       setMessage({type:"error", text:"Impossibile eliminare la nota!",show:true});
@@ -116,6 +120,8 @@ const Notes = () => {
       </ul>
       <form onSubmit={formSubmitHandler}>
         <input type="text" value={newNote} placeholder="a new note ..." onChange={inputChangeHanlder} />
+        <input type="checkbox" name="important" onChange={importantChangeHandler}/>
+        <label for="important">Important</label>
         <button type="submit">Save</button>
       </form>
     </>

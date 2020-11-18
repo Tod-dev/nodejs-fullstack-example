@@ -21,7 +21,8 @@
     "eject": "react-scripts eject",
     "server": "json-server -p3001 --watch ./src/data/db.json",
     "start": "cd backend && npm run start",
-    "start-dev": "cd backend && npm run start-dev"
+    "start-dev": "cd backend && npm run start-dev",
+    "update": "npm run build && cd backend && npm run start"
   },
   "eslintConfig": {
     "extends": "react-app"

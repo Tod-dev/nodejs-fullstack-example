@@ -54,8 +54,9 @@ app.delete(`${notesUrl}/:id`, (req,res,next) => {
     .catch(error => next(error))
 });
 
-app.put(`${notesUrl}:id`, (req,res,next) => {
+app.put(`${notesUrl}/:id`, (req,res,next) => {
   const body = req.body
+  //console.log(body)
   const note = {
     content: body.content,
     important: body.important,
@@ -71,6 +72,7 @@ app.put(`${notesUrl}:id`, (req,res,next) => {
 app.post(notesUrl, (req,res) => {
 
     const body = req.body
+    //console.log(body)
   
     if (body.content === undefined) {
       return res.status(400).json({ error: 'content missing' })
@@ -78,7 +80,7 @@ app.post(notesUrl, (req,res) => {
   
     const note = new Note({
       content: body.content,
-      important: body.important || false,
+      important: body.important,
       date: new Date(),
     })
   
